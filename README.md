@@ -145,3 +145,4 @@ Open your browser and navigate to:
 
 ## 📜 License
 MIT License — Free for academic, university, and personal portfolio use.
+
