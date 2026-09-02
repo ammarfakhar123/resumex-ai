@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}ResumeX AI — Make Your Resume Job-Ready with AI{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container hero-container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>ResumeX ATS & Resume Suite</span>
+            </div>
+            <h1 class="hero-title">
+                Make Your Resume <br>
+                <span class="gradient-text">Job-Ready with AI</span>
+            </h1>
+            <p class="hero-subtitle">
+                Analyze your existing resume or let ResumeX AI build a 100% ATS-optimized resume tailored specifically to your dream job title with impact-driven action verbs.
+            </p>
+            <div class="hero-actions">
+                <a href="/builder" class="btn btn-lg btn-primary glow-button">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Build ATS Resume
+                </a>
+                <a href="/analyze" class="btn btn-lg btn-secondary">
+                    <i class="fa-solid fa-gauge-high"></i> Analyze Existing Resume
+                </a>
+            </div>
+            <div class="hero-trust">
+                <div class="trust-item">
+                    <i class="fa-solid fa-shield-check text-success"></i> No Data Retention
+                </div>
+                <div class="trust-item">
+                    <i class="fa-solid fa-gauge-high text-info"></i> Instant ATS Scoring
+                </div>
+                <div class="trust-item">
+                    <i class="fa-solid fa-file-pdf text-warning"></i> One-Click PDF Export
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-preview">
+            <div class="glass-card preview-card">
+                <div class="preview-header">
+                    <div class="preview-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="preview-title">ResumeX ATS Intelligence</span>
+                </div>
+                <div class="preview-body">
+                    <div class="score-card-mini">
+                        <div class="radial-circle-mini">
+                            <span class="badge-ats-text">ATS</span>
+                        </div>
+                        <div class="score-meta-mini">
+                            <div class="meta-row">
+                                <span>Target Alignment</span>
+                                <strong class="text-success">98% (Role Tailored)</strong>
+                            </div>
+                            <div class="meta-row">
+                                <span>Action Verb Impact</span>
+                                <strong class="text-primary">Google XYZ Certified</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="preview-diff">
+                        <div class="diff-tag before">Raw User Note</div>
+                        <p class="diff-text">"I worked on our web pages and made them faster."</p>
+                        <div class="diff-tag after">AI Enhanced Output</div>
+                        <p class="diff-text highlight">"Architected modular React components and optimized asset pipelines, accelerating page speeds by 34%."</p>
+                    </div>
+
+                    <div class="preview-keywords">
+                        <span class="badge-chip"><i class="fa-solid fa-check"></i> ATS Compliant</span>
+                        <span class="badge-chip"><i class="fa-solid fa-check"></i> Role Tailored</span>
+                        <span class="badge-chip badge-missing"><i class="fa-solid fa-star"></i> Executive Format</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dual Action Choice Section -->
+<section class="dual-cta-section">
+    <div class="container">
+        <div class="dual-cards-grid">
+            
+            <div class="glass-card action-promo-card promo-builder">
+                <div class="promo-icon icon-purple">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <span class="badge-new">NEW FEATURE</span>
+                <h3>AI Resume Maker</h3>
+                <p>Don't have a resume or want a fresh start? Enter your basic info and target job. ResumeX AI will generate a complete, 100% ATS-optimized resume with clean templates and PDF download.</p>
+                <a href="/builder" class="btn btn-primary glow-button mt-3">
+                    <i class="fa-solid fa-plus"></i> Launch Resume Maker
+                </a>
+            </div>
+
+            <div class="glass-card action-promo-card promo-analyzer">
+                <div class="promo-icon icon-cyan">
+                    <i class="fa-solid fa-gauge-high"></i>
+                </div>
+                <span class="badge-popular">POPULAR</span>
+                <h3>ATS Resume Analyzer</h3>
+                <p>Already have a resume? Paste your text or upload PDF/Word file to get an instant 0–100 ATS score, detailed ATS breakdown checklist, missing role keywords, and bullet point rewrites.</p>
+                <a href="/analyze" class="btn btn-secondary mt-3">
+                    <i class="fa-solid fa-magnifying-glass-chart"></i> Analyze Existing Resume
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Engineered for <span class="gradient-text">Maximum Job Offers</span></h2>
+            <p class="section-subtitle">Everything you need to bypass recruitment gatekeepers and land high-paying interviews.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card glass-card">
+                <div class="feature-icon icon-cyan">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3 class="feature-title">AI Resume Generation</h3>
+                <p class="feature-desc">Transform raw work notes into executive, ATS-tailored bullet points utilizing dynamic action verbs and quantified impact.</p>
+            </div>
+
+            <div class="feature-card glass-card">
+                <div class="feature-icon icon-purple">
+                    <i class="fa-solid fa-filter"></i>
+                </div>
+                <h3 class="feature-title">Deep ATS Diagnostics</h3>
+                <p class="feature-desc">Comprehensive checklist covering header readability, date formatting, keyword frequency, and XYZ metric scores.</p>
+            </div>
+
+            <div class="feature-card glass-card">
+                <div class="feature-icon icon-green">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h3 class="feature-title">Target Job Alignment</h3>
+                <p class="feature-desc">Compare your skill profile against real job descriptions to identify and plug critical keyword gaps before applying.</p>
+            </div>
+
+            <div class="feature-card glass-card">
+                <div class="feature-icon icon-amber">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <h3 class="feature-title">Print-Ready PDF Export</h3>
+                <p class="feature-desc">Export clean, standard single-column PDF resumes formatted specifically for automated applicant tracking systems.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="steps-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">How It Works in <span class="gradient-text">3 Simple Steps</span></h2>
+            <p class="section-subtitle">Get professional recruiter-grade feedback and resumes in less than 30 seconds.</p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card glass-card">
+                <div class="step-number">01</div>
+                <h3 class="step-title">Input Info & Target Job</h3>
+                <p class="step-desc">Enter your work experience and the exact job title you want to target.</p>
+            </div>
+
+            <div class="step-card glass-card">
+                <div class="step-number">02</div>
+                <h3 class="step-title">AI Architecture & Scoring</h3>
+                <p class="step-desc">AI analyzes ATS standards, applies Google XYZ formulas, and optimizes keywords.</p>
+            </div>
+
+            <div class="step-card glass-card">
+                <div class="step-number">03</div>
+                <h3 class="step-title">Download & Apply</h3>
+                <p class="step-desc">Export your polished resume to PDF or copy text directly to job application portals.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

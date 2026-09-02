@@ -1,0 +1,402 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Analyzer & ATS Optimizer — ResumeX AI{% endblock %}
+
+{% block content %}
+<section class="analyzer-wrapper">
+    <div class="container">
+        
+        <!-- Top Heading -->
+        <div class="analyzer-header text-center">
+            <h1 class="page-title">AI Resume <span class="gradient-text">Intelligence Suite</span></h1>
+            <p class="page-subtitle">Upload your PDF/Word resume or paste your text to generate deep ATS scoring, keyword gaps, and bullet enhancements.</p>
+        </div>
+
+        <!-- ================= INPUT SECTION ================= -->
+        <div id="input-section" class="analyzer-card glass-card">
+            
+            <div class="form-banner-maker flex-between">
+                <div>
+                    <i class="fa-solid fa-wand-magic-sparkles text-secondary"></i>
+                    <span>Don't have a resume yet or want to build a brand new ATS-tailored resume?</span>
+                </div>
+                <a href="/builder" class="btn btn-sm btn-secondary">
+                    <i class="fa-solid fa-plus"></i> Open AI Resume Maker
+                </a>
+            </div>
+
+            <form id="resume-form" onsubmit="handleResumeAnalysis(event)">
+                <div class="form-grid">
+                    
+                    <!-- Top: Upload Dropzone & Method Switcher -->
+                    <div class="form-group span-full-md">
+                        <div class="upload-tabs-header flex-between">
+                            <label class="form-label">
+                                <i class="fa-solid fa-file-lines text-primary"></i> Resume Input
+                            </label>
+                            <div class="input-mode-toggles">
+                                <button type="button" class="mode-toggle-btn active" id="btn-mode-upload" onclick="switchInputMode('upload')">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> Upload PDF / Word (.docx)
+                                </button>
+                                <button type="button" class="mode-toggle-btn" id="btn-mode-paste" onclick="switchInputMode('paste')">
+                                    <i class="fa-solid fa-align-left"></i> Paste Text
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 1. Dropzone Mode -->
+                        <div id="dropzone-area" class="file-dropzone" onclick="document.getElementById('resume-file-input').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleFileDrop(event)">
+                            <input type="file" id="resume-file-input" accept=".pdf,.docx,.doc,.txt" style="display: none;" onchange="handleFileSelect(event)">
+                            <div class="dropzone-content">
+                                <div class="dropzone-icon">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                </div>
+                                <h4 class="dropzone-title">Click to upload or drag & drop your resume</h4>
+                                <p class="dropzone-sub">Supports <strong>PDF (.pdf)</strong>, <strong>Word (.docx)</strong>, or plain text (.txt) &bull; Max 10MB</p>
+                                
+                                <div id="uploading-spinner" style="display: none;" class="mt-2">
+                                    <i class="fa-solid fa-circle-notch fa-spin text-primary"></i> <span class="text-dim">Extracting resume text...</span>
+                                </div>
+
+                                <div id="file-loaded-badge" class="file-badge" style="display: none;">
+                                    <i class="fa-solid fa-circle-check text-success"></i>
+                                    <span id="file-loaded-name">resume.pdf</span>
+                                    <button type="button" class="btn-remove-file" onclick="clearUploadedFile(event)"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Textarea (Collapsible / Pre-filled from upload) -->
+                        <div id="paste-area" class="mt-3">
+                            <div class="label-row">
+                                <span class="text-dim" style="font-size: 0.85rem;">
+                                    <i class="fa-solid fa-code"></i> Extracted Resume Content
+                                </span>
+                                <div class="label-actions">
+                                    <button type="button" class="btn-text" id="btn-load-sample" onclick="loadSampleResume()">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Load Sample Resume
+                                    </button>
+                                    <span class="char-count" id="resume-char-count">0 / 25,000</span>
+                                </div>
+                            </div>
+                            <textarea 
+                                id="resume" 
+                                name="resume" 
+                                class="form-control code-font" 
+                                rows="8" 
+                                placeholder="Paste your resume here or upload a file above..."
+                                required
+                                maxlength="25000"
+                                oninput="updateCharCount()"
+                            ></textarea>
+                        </div>
+
+                    </div>
+
+                    <!-- Target Job -->
+                    <div class="form-group span-6">
+                        <label for="target_job" class="form-label">
+                            <i class="fa-solid fa-briefcase text-secondary"></i> Target Job Title <span class="required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="target_job" 
+                            name="target_job" 
+                            class="form-control" 
+                            placeholder="e.g. Senior Frontend Developer" 
+                            required
+                            maxlength="200"
+                        >
+                    </div>
+
+                    <!-- Job Description -->
+                    <div class="form-group span-6">
+                        <div class="label-row">
+                            <label for="job_description" class="form-label">
+                                <i class="fa-solid fa-file-invoice text-info"></i> Target Job Description <span class="optional">(Optional)</span>
+                            </label>
+                            <span class="char-count" id="jd-char-count">Optional</span>
+                        </div>
+                        <textarea 
+                            id="job_description" 
+                            name="job_description" 
+                            class="form-control" 
+                            rows="2" 
+                            placeholder="Paste the target job description here for deeper keyword matching..."
+                            maxlength="25000"
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <!-- Form Submit and Privacy -->
+                <div class="form-footer">
+                    <div class="privacy-tag">
+                        <i class="fa-solid fa-lock text-success"></i>
+                        <span>Zero Retention: Uploaded files and resumes are processed in memory and never stored.</span>
+                    </div>
+                    <button type="submit" id="btn-submit" class="btn btn-lg btn-primary glow-button">
+                        <span class="btn-text-content">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Analyze Resume
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ================= LOADING STATE ================= -->
+        <div id="loading-section" class="loading-container glass-card" style="display: none;">
+            <div class="pulse-orb">
+                <div class="orb-ring ring-1"></div>
+                <div class="orb-ring ring-2"></div>
+                <div class="orb-ring ring-3"></div>
+                <i class="fa-solid fa-bolt orb-icon"></i>
+            </div>
+            
+            <h3 id="loading-title" class="loading-title">Analyzing your resume...</h3>
+            <p id="loading-subtitle" class="loading-subtitle">ResumeX AI is reviewing your experience against ATS benchmarks.</p>
+            
+            <div class="loading-progress-bar">
+                <div id="progress-bar-fill" class="progress-bar-fill"></div>
+            </div>
+            
+            <div class="loading-steps">
+                <div class="step-badge active" id="step-1"><i class="fa-solid fa-circle-check"></i> Parse Structure</div>
+                <div class="step-badge" id="step-2"><i class="fa-solid fa-circle-notch fa-spin"></i> ATS & Keywords</div>
+                <div class="step-badge" id="step-3"><i class="fa-regular fa-circle"></i> Rewrite Bullets</div>
+            </div>
+        </div>
+
+        <!-- ================= RESULTS DASHBOARD ================= -->
+        <div id="results-section" class="results-dashboard" style="display: none;">
+            
+            <!-- Dashboard Action Bar -->
+            <div class="dashboard-action-bar">
+                <div class="dash-title-group">
+                    <h2>Analysis <span class="gradient-text">Report</span></h2>
+                    <span id="role-tag" class="role-badge">Frontend Developer</span>
+                    <span id="simulated-badge" class="badge badge-simulated" style="display: none;">Demo Mode</span>
+                </div>
+                <div class="dash-buttons">
+                    <a href="/builder" class="btn btn-secondary btn-sm">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Rebuild in AI Maker
+                    </a>
+                    <button onclick="copyFullReport()" class="btn btn-secondary btn-sm">
+                        <i class="fa-regular fa-copy"></i> Copy Summary
+                    </button>
+                    <button onclick="resetAnalyzer()" class="btn btn-primary btn-sm glow-button">
+                        <i class="fa-solid fa-rotate-left"></i> Analyze Another Resume
+                    </button>
+                </div>
+            </div>
+
+            <!-- 1. Top Scores Summary -->
+            <div class="score-cards-grid">
+                <!-- Overall Score -->
+                <div class="glass-card score-card main-score">
+                    <div class="score-card-header">
+                        <span class="score-type">Overall Score</span>
+                        <i class="fa-solid fa-trophy text-warning"></i>
+                    </div>
+                    <div class="score-gauge-container">
+                        <div class="score-circle" id="overall-score-circle">
+                            <span class="score-val" id="val-overall-score">0</span>
+                            <span class="score-max">/100</span>
+                        </div>
+                    </div>
+                    <p class="score-caption" id="overall-score-verdict">Calculating score...</p>
+                </div>
+
+                <!-- ATS Score -->
+                <div class="glass-card score-card">
+                    <div class="score-card-header">
+                        <span class="score-type">ATS Compatibility</span>
+                        <i class="fa-solid fa-shield-halved text-success"></i>
+                    </div>
+                    <div class="score-metric">
+                        <span class="metric-val text-success" id="val-ats-score">0</span>
+                        <span class="metric-max">/100</span>
+                    </div>
+                    <p class="score-explanation" id="val-ats-explanation">Checking parser readability...</p>
+                </div>
+
+                <!-- Job Match Score -->
+                <div class="glass-card score-card">
+                    <div class="score-card-header">
+                        <span class="score-type">Job Match Alignment</span>
+                        <i class="fa-solid fa-bullseye text-info"></i>
+                    </div>
+                    <div class="score-metric">
+                        <span class="metric-val text-info" id="val-job-match-score">0</span>
+                        <span class="metric-max">/100</span>
+                    </div>
+                    <p class="score-explanation">Alignment between your listed background and target role requirements.</p>
+                </div>
+            </div>
+
+            <!-- 2. DEEP ATS CHECKLIST & DIAGNOSTICS -->
+            <div class="glass-card detail-card section-card">
+                <div class="detail-card-header">
+                    <div class="header-icon icon-purple">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div>
+                        <h3>ATS Audit & Parseability Checklist</h3>
+                        <p class="card-subtitle">Detailed breakdown of how recruitment algorithms and ATS scanners evaluate your resume.</p>
+                    </div>
+                </div>
+                <div class="ats-checklist-grid" id="container-ats-checklist">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- 3. Strengths & Weaknesses (2 Column Layout) -->
+            <div class="grid-2-col">
+                <div class="glass-card detail-card">
+                    <div class="detail-card-header">
+                        <div class="header-icon icon-success">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <h3>Key Strengths</h3>
+                    </div>
+                    <ul class="feedback-list strengths-list" id="list-strengths">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+
+                <div class="glass-card detail-card">
+                    <div class="detail-card-header">
+                        <div class="header-icon icon-danger">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h3>Areas for Improvement</h3>
+                    </div>
+                    <ul class="feedback-list weaknesses-list" id="list-weaknesses">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 4. Missing Keywords & Target Terms -->
+            <div class="glass-card detail-card section-card">
+                <div class="detail-card-header">
+                    <div class="header-icon icon-warning">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                    <div>
+                        <h3>Missing ATS Keywords & Skills</h3>
+                        <p class="card-subtitle">Terms expected for this target job that are not clearly mentioned in your resume.</p>
+                    </div>
+                </div>
+                <div class="chips-container" id="container-missing-keywords">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- 5. Improved Professional Summary -->
+            <div class="glass-card detail-card section-card">
+                <div class="detail-card-header flex-between">
+                    <div class="header-icon-title">
+                        <div class="header-icon icon-purple">
+                            <i class="fa-solid fa-signature"></i>
+                        </div>
+                        <div>
+                            <h3>Optimized Professional Summary</h3>
+                            <p class="card-subtitle">AI-crafted summary tailored specifically for your target role based strictly on your verified experience.</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-secondary copy-btn" onclick="copyText('val-summary-text', this)">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                </div>
+                <div class="summary-box">
+                    <p id="val-summary-text" class="summary-content">Loading summary...</p>
+                </div>
+            </div>
+
+            <!-- 6. Bullet Point Improvements -->
+            <div class="glass-card detail-card section-card">
+                <div class="detail-card-header">
+                    <div class="header-icon icon-cyan">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <div>
+                        <h3>Bullet Point Enhancements (Before &rarr; After)</h3>
+                        <p class="card-subtitle">Transform passive descriptions into punchy, metric-ready bullet points with strong action verbs.</p>
+                    </div>
+                </div>
+                <div class="bullet-improvements-list" id="list-bullet-improvements">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- 7. Skills Breakdown (Present vs Recommended) -->
+            <div class="grid-2-col">
+                <div class="glass-card detail-card">
+                    <div class="detail-card-header">
+                        <div class="header-icon icon-info">
+                            <i class="fa-solid fa-check-double"></i>
+                        </div>
+                        <h3>Identified Skills in Resume</h3>
+                    </div>
+                    <div class="chips-container" id="container-skills-present">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="glass-card detail-card">
+                    <div class="detail-card-header">
+                        <div class="header-icon icon-purple">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        </div>
+                        <h3>Recommended Skills to Learn / Highlight</h3>
+                    </div>
+                    <div class="chips-container" id="container-skills-recommended">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Final Strategic Recommendations & ATS Suggestions -->
+            <div class="glass-card detail-card section-card">
+                <div class="detail-card-header">
+                    <div class="header-icon icon-amber">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h3>Actionable ATS Improvement Plan</h3>
+                        <p class="card-subtitle">High-leverage steps to raise your ATS score above 90%.</p>
+                    </div>
+                </div>
+                <div class="recommendations-container" id="list-final-recommendations">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Promotion Banner to Builder -->
+            <div class="cta-banner glass-card mt-4">
+                <div class="cta-content">
+                    <h3>Want an ATS-Optimized Resume Generated Automatically?</h3>
+                    <p>Use our AI Resume Maker to create a 100% compliant resume tailored to your target job in 30 seconds.</p>
+                </div>
+                <a href="/builder" class="btn btn-lg btn-primary glow-button">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Open AI Resume Maker
+                </a>
+            </div>
+
+            <!-- Reset Button in Bottom Footer -->
+            <div class="text-center bottom-reset-area">
+                <button onclick="resetAnalyzer()" class="btn btn-lg btn-primary glow-button">
+                    <i class="fa-solid fa-rotate-left"></i> Analyze Another Resume
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/app.js"></script>
+{% endblock %}

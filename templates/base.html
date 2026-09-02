@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ResumeX AI — Make Your Resume Job-Ready with AI{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block head %}{% endblock %}
+</head>
+<body class="light-theme">
+    <!-- Navigation -->
+    <header class="navbar no-print">
+        <div class="container nav-container">
+            <a href="/" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <span class="brand-name">Resume<span class="gradient-text">X</span> <span class="ai-badge">AI</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/analyze" class="nav-link"><i class="fa-solid fa-gauge-high"></i> ATS Analyzer</a>
+                <a href="/builder" class="nav-link nav-highlight"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Resume Maker</a>
+                <a href="/builder" class="btn btn-sm btn-primary">
+                    <i class="fa-solid fa-plus"></i> Build New Resume
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer no-print">
+        <div class="container">
+            <div class="footer-top-grid">
+                
+                <!-- Brand Column -->
+                <div class="footer-col footer-brand-col">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <span class="brand-name">Resume<span class="gradient-text">X</span> <span class="ai-badge">AI</span></span>
+                    </div>
+                    <p class="footer-desc">The modern career intelligence platform. Optimize your resume for Applicant Tracking Systems, uncover keyword gaps, and generate role-tailored resumes in seconds.</p>
+                    <div class="footer-compliance-pill">
+                        <i class="fa-solid fa-shield-check text-success"></i>
+                        <span>Zero Data Retention &bull; In-Memory Processing</span>
+                    </div>
+                </div>
+
+                <!-- Product Column -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Product</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="/analyze"><i class="fa-solid fa-angle-right"></i> ATS Resume Analyzer</a></li>
+                        <li><a href="/builder"><i class="fa-solid fa-angle-right"></i> AI Resume Maker</a></li>
+                        <li><a href="/analyze#container-missing-keywords"><i class="fa-solid fa-angle-right"></i> Keyword Gap Scanner</a></li>
+                        <li><a href="/builder#resume-canvas"><i class="fa-solid fa-angle-right"></i> ATS PDF Exporter</a></li>
+                    </ul>
+                </div>
+
+                <!-- Solutions Column -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Features</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="/#features"><i class="fa-solid fa-angle-right"></i> ATS Scoring Engine</a></li>
+                        <li><a href="/#features"><i class="fa-solid fa-angle-right"></i> Google XYZ Metrics</a></li>
+                        <li><a href="/#features"><i class="fa-solid fa-angle-right"></i> Role-Tailored Summaries</a></li>
+                        <li><a href="/#how-it-works"><i class="fa-solid fa-angle-right"></i> 3-Step Optimization</a></li>
+                    </ul>
+                </div>
+
+                <!-- Privacy & Trust Column -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Security & Trust</h4>
+                    <div class="footer-trust-box">
+                        <div class="trust-box-header">
+                            <i class="fa-solid fa-lock text-success"></i>
+                            <strong>Privacy Promise</strong>
+                        </div>
+                        <p class="trust-box-text">We do not store resumes, create user profiles, or sell candidate data. All analysis is completed ephemerally during your current session.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom Bar -->
+            <div class="footer-bottom-bar">
+                <div class="footer-copyright">
+                    &copy; 2026 ResumeX AI. All rights reserved.
+                </div>
+                <div class="footer-legal-links">
+                    <a href="/#features">Product Overview</a>
+                    <span class="divider">&bull;</span>
+                    <a href="/analyze">Instant Analyzer</a>
+                    <span class="divider">&bull;</span>
+                    <a href="/builder">Resume Creator</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container no-print"></div>
+
+    <!-- Scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

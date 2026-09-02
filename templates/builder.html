@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}AI Resume Maker — 100% ATS-Optimized | ResumeX AI{% endblock %}
+
+{% block content %}
+<section class="builder-wrapper">
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="analyzer-header text-center">
+            <div class="hero-badge">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>ResumeX AI Resume Architect</span>
+            </div>
+            <h1 class="page-title">AI ATS <span class="gradient-text">Resume Maker</span></h1>
+            <p class="page-subtitle">Enter your experience and target role. ResumeX AI will craft a tailored, high-scoring ATS-friendly resume in seconds.</p>
+        </div>
+
+        <!-- ================= BUILDER INPUT FORM ================= -->
+        <div id="builder-form-section" class="analyzer-card glass-card">
+            
+            <div class="form-header-bar">
+                <span class="step-indicator"><i class="fa-solid fa-pen-to-square"></i> Candidate Profile & Job Target</span>
+                <button type="button" class="btn-text" onclick="loadSampleProfile()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Fill Sample Profile
+                </button>
+            </div>
+
+            <form id="resume-builder-form" onsubmit="handleGenerateResume(event)">
+                
+                <!-- 1. Personal & Contact Info -->
+                <div class="builder-section">
+                    <h3 class="builder-section-title"><i class="fa-solid fa-user text-primary"></i> 1. Personal & Contact Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group span-6">
+                            <label class="form-label">Full Name <span class="required">*</span></label>
+                            <input type="text" id="b_full_name" class="form-control" placeholder="e.g. Alex Morgan" required>
+                        </div>
+                        <div class="form-group span-6">
+                            <label class="form-label">Email Address <span class="required">*</span></label>
+                            <input type="email" id="b_email" class="form-control" placeholder="alex.morgan@email.com" required>
+                        </div>
+                        <div class="form-group span-4">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" id="b_phone" class="form-control" placeholder="+1 (555) 019-2834">
+                        </div>
+                        <div class="form-group span-4">
+                            <label class="form-label">Location (City, Country)</label>
+                            <input type="text" id="b_location" class="form-control" placeholder="San Francisco, CA">
+                        </div>
+                        <div class="form-group span-4">
+                            <label class="form-label">LinkedIn / Portfolio URL</label>
+                            <input type="text" id="b_linkedin" class="form-control" placeholder="linkedin.com/in/alexmorgan">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Target Desired Job (Crucial for AI Customization) -->
+                <div class="builder-section highlight-box">
+                    <h3 class="builder-section-title"><i class="fa-solid fa-bullseye text-warning"></i> 2. Target Job Customization</h3>
+                    <p class="section-desc">ResumeX AI will optimize your keywords, summaries, and bullet points specifically for this role.</p>
+                    <div class="form-grid">
+                        <div class="form-group span-6">
+                            <label class="form-label">Target Desired Job Title <span class="required">*</span></label>
+                            <input type="text" id="b_target_job" class="form-control font-bold" placeholder="e.g. Senior Full Stack Developer" required>
+                        </div>
+                        <div class="form-group span-6">
+                            <label class="form-label">Target Job Description <span class="optional">(Optional - for precise keyword injection)</span></label>
+                            <textarea id="b_job_description" class="form-control" rows="2" placeholder="Paste requirements from the job posting to align ATS keywords..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Work Experience Repeater -->
+                <div class="builder-section">
+                    <div class="flex-between section-heading-row">
+                        <h3 class="builder-section-title"><i class="fa-solid fa-briefcase text-secondary"></i> 3. Work Experience</h3>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="addExperienceRow()">
+                            <i class="fa-solid fa-plus"></i> Add Experience
+                        </button>
+                    </div>
+                    <div id="experience-container" class="repeater-container">
+                        <!-- Experience rows dynamically appended -->
+                    </div>
+                </div>
+
+                <!-- 4. Education & Certifications -->
+                <div class="builder-section">
+                    <div class="flex-between section-heading-row">
+                        <h3 class="builder-section-title"><i class="fa-solid fa-graduation-cap text-info"></i> 4. Education & Certifications</h3>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="addEducationRow()">
+                            <i class="fa-solid fa-plus"></i> Add Education
+                        </button>
+                    </div>
+                    <div id="education-container" class="repeater-container">
+                        <!-- Education rows dynamically appended -->
+                    </div>
+                    <div class="form-group mt-3">
+                        <label class="form-label">Certifications / Licenses <span class="optional">(Comma separated)</span></label>
+                        <input type="text" id="b_certifications" class="form-control" placeholder="AWS Certified Solutions Architect, Scrum Master (CSM), Google Cloud Associate">
+                    </div>
+                </div>
+
+                <!-- 5. Skills & Projects -->
+                <div class="builder-section">
+                    <h3 class="builder-section-title"><i class="fa-solid fa-code text-cyan"></i> 5. Skills & Key Projects</h3>
+                    <div class="form-group">
+                        <label class="form-label">Skills & Technologies <span class="required">*</span> <span class="optional">(Comma separated)</span></label>
+                        <textarea id="b_skills" class="form-control" rows="2" placeholder="React, Node.js, Python, TypeScript, Docker, SQL, REST APIs, Git, Tailwind CSS" required></textarea>
+                    </div>
+
+                    <div class="flex-between section-heading-row mt-4">
+                        <label class="form-label font-bold"><i class="fa-solid fa-diagram-project text-warning"></i> Key Projects <span class="optional">(Optional)</span></label>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="addProjectRow()">
+                            <i class="fa-solid fa-plus"></i> Add Project
+                        </button>
+                    </div>
+                    <div id="projects-container" class="repeater-container">
+                        <!-- Project rows dynamically appended -->
+                    </div>
+                </div>
+
+                <!-- Form Submit Footer -->
+                <div class="form-footer">
+                    <div class="privacy-tag">
+                        <i class="fa-solid fa-shield-check text-success"></i>
+                        <span>Zero Storage: All generated resumes are created on-the-fly and never stored.</span>
+                    </div>
+                    <button type="submit" id="btn-generate" class="btn btn-lg btn-primary glow-button">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate ATS-Optimized Resume
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- ================= LOADING STATE ================= -->
+        <div id="builder-loading" class="loading-container glass-card" style="display: none;">
+            <div class="pulse-orb">
+                <div class="orb-ring ring-1"></div>
+                <div class="orb-ring ring-2"></div>
+                <div class="orb-ring ring-3"></div>
+                <i class="fa-solid fa-wand-magic-sparkles orb-icon"></i>
+            </div>
+            <h3 id="builder-loading-title" class="loading-title">Architecting your ATS resume...</h3>
+            <p id="builder-loading-subtitle" class="loading-subtitle">Applying Google XYZ impact formulas and tailoring keywords for your target role.</p>
+            <div class="loading-progress-bar">
+                <div id="builder-progress-fill" class="progress-bar-fill"></div>
+            </div>
+            <div class="loading-steps">
+                <div class="step-badge active" id="b-step-1"><i class="fa-solid fa-circle-check"></i> Target Alignment</div>
+                <div class="step-badge" id="b-step-2"><i class="fa-solid fa-circle-notch fa-spin"></i> Action Verbs & XYZ</div>
+                <div class="step-badge" id="b-step-3"><i class="fa-regular fa-circle"></i> Clean ATS Formatting</div>
+            </div>
+        </div>
+
+        <!-- ================= GENERATED RESUME DASHBOARD & PREVIEW ================= -->
+        <div id="builder-results" class="builder-results-wrapper" style="display: none;">
+            
+            <!-- Action Toolbar (Hidden during print) -->
+            <div class="resume-toolbar glass-card no-print">
+                <div class="toolbar-left">
+                    <div class="ats-badge-group">
+                        <span class="badge-ats-score"><i class="fa-solid fa-shield-halved"></i> Estimated ATS Score: <strong id="res-ats-score">98/100</strong></span>
+                        <span class="badge-role" id="res-target-role">Senior Full Stack Developer</span>
+                    </div>
+                    <!-- Template Selector -->
+                    <div class="template-selector">
+                        <label>Template Style:</label>
+                        <button class="tpl-btn active" onclick="switchResumeTemplate('tpl-modern', this)">Modern ATS</button>
+                        <button class="tpl-btn" onclick="switchResumeTemplate('tpl-executive', this)">Executive</button>
+                        <button class="tpl-btn" onclick="switchResumeTemplate('tpl-minimal', this)">Minimalist</button>
+                    </div>
+                </div>
+
+                <div class="toolbar-right">
+                    <button onclick="printResumePDF()" class="btn btn-primary btn-sm glow-button">
+                        <i class="fa-solid fa-print"></i> Download / Print PDF
+                    </button>
+                    <button onclick="copyResumeText()" class="btn btn-secondary btn-sm">
+                        <i class="fa-regular fa-copy"></i> Copy Text
+                    </button>
+                    <button onclick="copyResumeMarkdown()" class="btn btn-secondary btn-sm">
+                        <i class="fa-brands fa-markdown"></i> Copy Markdown
+                    </button>
+                    <button onclick="sendToATSAnalyzer()" class="btn btn-secondary btn-sm text-info">
+                        <i class="fa-solid fa-gauge-high"></i> Test in ATS Analyzer
+                    </button>
+                    <button onclick="editBuilderForm()" class="btn btn-secondary btn-sm">
+                        <i class="fa-solid fa-pen"></i> Edit Info
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resume Paper Document Preview (Print Area) -->
+            <div class="resume-paper-container">
+                <div id="resume-canvas" class="resume-paper tpl-modern">
+                    <!-- Dynamic Resume Content Rendered Here -->
+                </div>
+            </div>
+
+            <!-- Bottom Action Controls -->
+            <div class="text-center bottom-reset-area no-print">
+                <button onclick="editBuilderForm()" class="btn btn-secondary btn-lg">
+                    <i class="fa-solid fa-arrow-left"></i> Edit Details
+                </button>
+                <button onclick="printResumePDF()" class="btn btn-primary btn-lg glow-button">
+                    <i class="fa-solid fa-file-pdf"></i> Download Clean PDF
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/app.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Initialize at least 1 experience and 1 education row if empty
+        if (document.getElementById("experience-container").children.length === 0) {
+            addExperienceRow();
+        }
+        if (document.getElementById("education-container").children.length === 0) {
+            addEducationRow();
+        }
+    });
+</script>
+{% endblock %}
